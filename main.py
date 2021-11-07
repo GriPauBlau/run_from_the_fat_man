@@ -22,6 +22,9 @@ circle_centre_x = random.random() * size_x
 circle_centre_y = random.random() * size_y
 extra_centre = (circle_centre_x, circle_centre_y)
 extra_radius = 10
+win_circle_x = 1100
+win_circle_y = 100
+win_circle = (win_circle_x, win_circle_y)
 vel = 20
 baddyVel = 10
 run = True
@@ -32,6 +35,7 @@ def draw_game():
     pygame.draw.rect(win, (31, 226, 255), (player2X, player2Y, 20, 20))
     pygame.draw.rect(win, (0, 250, 0), (baddyX, baddyY, 40, 40))
     pygame.draw.circle(win, (250, 0, 0), extra_centre, extra_radius)
+    pygame.draw.circle(win, (255, 255, 255), win_circle, 30, 30)
     pygame.display.update()
 
 def distance(x, y, a, b):
@@ -116,7 +120,6 @@ while run:
 
     if abs(baddyY - player1Y) < 30 and abs(baddyX - player1X) < 30:
         run = False
-
     if abs(baddyY - player2Y) < 30 and abs(baddyX - player2X) < 30:
         run = False
 
@@ -132,9 +135,16 @@ while run:
         extra_centre = (circle_centre_x, circle_centre_y)
         p2_score += 1
 
-print("p1_score: ", p1_score )
-print("p2_score: ", p2_score )
+    if distance(player1X, player1Y, win_circle_x, win_circle_y) < 40 and p1_score >= 5:
+        run = False
+    if distance(player2X, player2Y, win_circle_x, win_circle_y) < 40 and p2_score >= 5:
+        run = False
+        if p1_score > p2_score:
+            print("Player 1 Wins!")
+        elif p2_score > p1_score:
+            print("Player 2 Wins!")
+
+print("p1_score: ", p1_score)
+print("p2_score: ", p2_score)
 pygame.quit()
-
-
 
