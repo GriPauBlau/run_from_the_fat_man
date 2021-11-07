@@ -1,8 +1,15 @@
 import pygame
 import math
+import random
 
 pygame.init()
-win = pygame.display.set_mode((1280, 720))
+
+p1_score = 0
+p2_score = 0
+
+size_x = 1280
+size_y = 720
+win = pygame.display.set_mode((size_x, size_y))
 pygame.display.set_caption("Run from the Fat Man")
 
 player1X = 100
@@ -11,8 +18,10 @@ baddyX = 300
 baddyY = 300
 player2X = 100
 player2Y = 100
-extra_centre = (500, 500)
-extra_radius = 20
+circle_centre_x = random.random() * size_x
+circle_centre_y = random.random() * size_y
+extra_centre = (circle_centre_x, circle_centre_y)
+extra_radius = 10
 vel = 20
 baddyVel = 10
 run = True
@@ -111,8 +120,21 @@ while run:
     if abs(baddyY - player2Y) < 30 and abs(baddyX - player2X) < 30:
         run = False
 
-pygame.quit()
+    if distance(player1X, player1Y, circle_centre_x, circle_centre_y) < 30:
+        circle_centre_x = random.random() * size_x
+        circle_centre_y = random.random() * size_y
+        extra_centre = (circle_centre_x, circle_centre_y)
+        p1_score += 1
 
+    if distance(player2X, player2Y, circle_centre_x, circle_centre_y) < 30:
+        circle_centre_x = random.random() * size_x
+        circle_centre_y = random.random() * size_y
+        extra_centre = (circle_centre_x, circle_centre_y)
+        p2_score += 1
+
+print("p1_score: ", p1_score )
+print("p2_score: ", p2_score )
+pygame.quit()
 
 
 
