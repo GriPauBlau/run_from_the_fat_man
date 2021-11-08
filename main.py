@@ -27,6 +27,7 @@ win_circle_y = 100
 win_circle = (win_circle_x, win_circle_y)
 vel = 20
 baddyVel = 10
+
 run = True
 
 def draw_game():
@@ -57,33 +58,27 @@ def chase(x, y, chaser_x, chaser_y):
     elif chaser_y > y + 10:
         chaser_y -= baddyVel
     else:
+
         run = False
 
     return chaser_x, chaser_y
 
-
 while run:
-    pygame.time.delay(50)
+    pygame.time.delay(100)
     h1 = distance(player1X, player1Y, baddyX, baddyY)
     h2 = distance(player2X, player2Y, baddyX, baddyY)
     # Baddy position
     if h1 < h2:
         # chase player1
         baddyX, baddyY = chase(player1X, player1Y, baddyX, baddyY)
+        if run==False:
+            print("Exit Player 1")
+            p1_score -= 2
     elif h1 > h2:
         # chase player2
-        if baddyX < player2X - 10:
-            baddyX = baddyX + baddyVel
-            draw_game()
-        elif baddyX > player2X + 10:
-            draw_game()
-            baddyX = baddyX - baddyVel
-        elif baddyY < player2Y - 10:
-            baddyY = baddyY + baddyVel
-        elif baddyY > player2Y + 10:
-            baddyY = baddyY - baddyVel
-        else:
-            run = False
+        baddyX, baddyY = chase(player2X, player2Y, baddyX, baddyY)
+        if not run:
+            p2_score -= 2
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -92,29 +87,29 @@ while run:
     keys = pygame.key.get_pressed()
 
     # player position 1
-    if keys[pygame.K_a]:
+    if keys[pygame.K_a] and player1X >= 20:
         player1X -= vel
 
-    if keys[pygame.K_d]:
+    if keys[pygame.K_d] and player1X <= 1250:
         player1X += vel
 
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] and player1Y >= 20:
         player1Y -= vel
 
-    if keys[pygame.K_s]:
+    if keys[pygame.K_s] and player1Y <= 680:
         player1Y += vel
 
     # player 2 position
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_LEFT] and player2X >= 20:
         player2X -= vel
 
-    if keys[pygame.K_RIGHT]:
+    if keys[pygame.K_RIGHT] and player2X <= 1250:
         player2X += vel
 
-    if keys[pygame.K_UP]:
+    if keys[pygame.K_UP] and player2Y >= 20:
         player2Y -= vel
 
-    if keys[pygame.K_DOWN]:
+    if keys[pygame.K_DOWN] and player2Y <= 680:
         player2Y += vel
     draw_game()
 
@@ -140,9 +135,9 @@ while run:
     if distance(player2X, player2Y, win_circle_x, win_circle_y) < 40 and p2_score >= 5:
         run = False
         if p1_score > p2_score:
-            print("Player 1 Wins!")
+            print("Player 1 wins!")
         elif p2_score > p1_score:
-            print("Player 2 Wins!")
+            print("Player 2 wins!")
 
 print("p1_score: ", p1_score)
 print("p2_score: ", p2_score)
