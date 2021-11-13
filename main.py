@@ -4,14 +4,17 @@ import random
 
 pygame.init()
 
-p1_score = 0
-p2_score = 0
-
+# Define screen size and set it up
 SCREEN_WIDTH = 2 * 1280
 SCREEN_HEIGHT = 2 * 720
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Run from the Fat Man")
+
+
+# Initiate game variables
+p1_score = 0
+p2_score = 0
 
 player1X = 100
 player1Y = 100
@@ -29,9 +32,9 @@ win_circle = (win_circle_x, win_circle_y)
 vel = 20
 baddyVel = 10
 
-run = True
+running = True
 
-
+# Definition of functions for the game
 def draw_game():
     screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (226, 31, 255), (player1X, player1Y, 20, 20))
@@ -64,7 +67,8 @@ def chase(x, y, chaser_x, chaser_y):
     return chaser_x, chaser_y
 
 
-while run:
+# Main game loop ----
+while running:
     pygame.time.delay(100)
     h1 = distance(player1X, player1Y, baddyX, baddyY)
     h2 = distance(player2X, player2Y, baddyX, baddyY)
@@ -72,18 +76,22 @@ while run:
     if h1 < h2:
         # chase player1
         baddyX, baddyY = chase(player1X, player1Y, baddyX, baddyY)
-        if run:
+        if running:
             print("Exit Player 1")
             p1_score -= 2
     elif h1 > h2:
         # chase player2
         baddyX, baddyY = chase(player2X, player2Y, baddyX, baddyY)
-        if not run:
+        if not running:
             p2_score -= 2
 
+    # Manage quitting the game
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
 
     keys = pygame.key.get_pressed()
 
@@ -115,9 +123,9 @@ while run:
     draw_game()
 
     if abs(baddyY - player1Y) < 30 and abs(baddyX - player1X) < 30:
-        run = False
+        running = False
     if abs(baddyY - player2Y) < 30 and abs(baddyX - player2X) < 30:
-        run = False
+        running = False
 
     if distance(player1X, player1Y, circle_centre_x, circle_centre_y) < 30:
         circle_centre_x = random.random() * SCREEN_WIDTH
@@ -132,9 +140,9 @@ while run:
         p2_score += 1
 
     if distance(player1X, player1Y, win_circle_x, win_circle_y) < 40 and p1_score >= 5:
-        run = False
+        running = False
     if distance(player2X, player2Y, win_circle_x, win_circle_y) < 40 and p2_score >= 5:
-        run = False
+        running = False
         if p1_score > p2_score:
             print("Player 1 wins!")
         elif p2_score > p1_score:
