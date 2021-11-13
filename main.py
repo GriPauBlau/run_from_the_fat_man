@@ -7,9 +7,9 @@ pygame.init()
 p1_score = 0
 p2_score = 0
 
-size_x = 2 * 1280
-size_y = 2 * 720
-win = pygame.display.set_mode((size_x, size_y))
+SCREEN_WIDTH = 2 * 1280
+SCREEN_HEIGHT = 2 * 720
+win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Run from the Fat Man")
 
 player1X = 100
@@ -18,8 +18,8 @@ baddyX = 300
 baddyY = 300
 player2X = 100
 player2Y = 100
-circle_centre_x = random.random() * size_x
-circle_centre_y = random.random() * size_y
+circle_centre_x = random.random() * SCREEN_WIDTH
+circle_centre_y = random.random() * SCREEN_HEIGHT
 extra_centre = (circle_centre_x, circle_centre_y)
 extra_radius = 10
 win_circle_x = 1100
@@ -90,26 +90,26 @@ while run:
     if keys[pygame.K_a] and player1X >= 20:
         player1X -= vel
 
-    if keys[pygame.K_d] and player1X <= size_x - 40:
+    if keys[pygame.K_d] and player1X <= SCREEN_WIDTH - 40:
         player1X += vel
 
     if keys[pygame.K_w] and player1Y >= 20:
         player1Y -= vel
 
-    if keys[pygame.K_s] and player1Y <= size_y - 40:
+    if keys[pygame.K_s] and player1Y <= SCREEN_HEIGHT - 40:
         player1Y += vel
 
     # player 2 position
     if keys[pygame.K_LEFT] and player2X >= 20:
         player2X -= vel
 
-    if keys[pygame.K_RIGHT] and player2X <= size_x - 40:
+    if keys[pygame.K_RIGHT] and player2X <= SCREEN_WIDTH - 40:
         player2X += vel
 
     if keys[pygame.K_UP] and player2Y >= 20:
         player2Y -= vel
 
-    if keys[pygame.K_DOWN] and player2Y <= size_y - 40:
+    if keys[pygame.K_DOWN] and player2Y <= SCREEN_HEIGHT - 40:
         player2Y += vel
     draw_game()
 
@@ -119,14 +119,14 @@ while run:
         run = False
 
     if distance(player1X, player1Y, circle_centre_x, circle_centre_y) < 30:
-        circle_centre_x = random.random() * size_x
-        circle_centre_y = random.random() * size_y
+        circle_centre_x = random.random() * SCREEN_WIDTH
+        circle_centre_y = random.random() * SCREEN_HEIGHT
         extra_centre = (circle_centre_x, circle_centre_y)
         p1_score += 1
 
     if distance(player2X, player2Y, circle_centre_x, circle_centre_y) < 30:
-        circle_centre_x = random.random() * size_x
-        circle_centre_y = random.random() * size_y
+        circle_centre_x = random.random() * SCREEN_WIDTH
+        circle_centre_y = random.random() * SCREEN_HEIGHT
         extra_centre = (circle_centre_x, circle_centre_y)
         p2_score += 1
 
