@@ -9,7 +9,8 @@ p2_score = 0
 
 SCREEN_WIDTH = 2 * 1280
 SCREEN_HEIGHT = 2 * 720
-win = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Run from the Fat Man")
 
 player1X = 100
@@ -32,12 +33,12 @@ run = True
 
 
 def draw_game():
-    win.fill((0, 0, 0))
-    pygame.draw.rect(win, (226, 31, 255), (player1X, player1Y, 20, 20))
-    pygame.draw.rect(win, (31, 226, 255), (player2X, player2Y, 20, 20))
-    pygame.draw.rect(win, (0, 250, 0), (baddyX, baddyY, 40, 40))
-    pygame.draw.circle(win, (250, 0, 0), extra_centre, extra_radius)
-    pygame.draw.circle(win, (255, 255, 255), win_circle, 30, 30)
+    screen.fill((0, 0, 0))
+    pygame.draw.rect(screen, (226, 31, 255), (player1X, player1Y, 20, 20))
+    pygame.draw.rect(screen, (31, 226, 255), (player2X, player2Y, 20, 20))
+    pygame.draw.rect(screen, (0, 250, 0), (baddyX, baddyY, 40, 40))
+    pygame.draw.circle(screen, (250, 0, 0), extra_centre, extra_radius)
+    pygame.draw.circle(screen, (255, 255, 255), win_circle, 30, 30)
     pygame.display.update()
 
 
