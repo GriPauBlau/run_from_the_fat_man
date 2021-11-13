@@ -33,7 +33,7 @@ run = True
 
 
 def draw_game():
-    win.fill((0, 0, 0))
+    screen.fill((0, 0, 0))
     pygame.draw.rect(screen, (226, 31, 255), (player1X, player1Y, 20, 20))
     pygame.draw.rect(screen, (31, 226, 255), (player2X, player2Y, 20, 20))
     pygame.draw.rect(screen, (0, 250, 0), (baddyX, baddyY, 40, 40))
