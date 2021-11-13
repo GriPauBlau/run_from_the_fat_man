@@ -7,8 +7,8 @@ pygame.init()
 p1_score = 0
 p2_score = 0
 
-size_x = 1280
-size_y = 720
+size_x = 2 * 1280
+size_y = 2 * 720
 win = pygame.display.set_mode((size_x, size_y))
 pygame.display.set_caption("Run from the Fat Man")
 
@@ -30,6 +30,7 @@ baddyVel = 10
 
 run = True
 
+
 def draw_game():
     win.fill((0, 0, 0))
     pygame.draw.rect(win, (226, 31, 255), (player1X, player1Y, 20, 20))
@@ -38,6 +39,7 @@ def draw_game():
     pygame.draw.circle(win, (250, 0, 0), extra_centre, extra_radius)
     pygame.draw.circle(win, (255, 255, 255), win_circle, 30, 30)
     pygame.display.update()
+
 
 def distance(x, y, a, b):
     x1 = abs(x - a)
@@ -57,11 +59,9 @@ def chase(x, y, chaser_x, chaser_y):
         chaser_y += baddyVel
     elif chaser_y > y + 10:
         chaser_y -= baddyVel
-    else:
-
-        run = False
 
     return chaser_x, chaser_y
+
 
 while run:
     pygame.time.delay(100)
@@ -71,7 +71,7 @@ while run:
     if h1 < h2:
         # chase player1
         baddyX, baddyY = chase(player1X, player1Y, baddyX, baddyY)
-        if run==False:
+        if run:
             print("Exit Player 1")
             p1_score -= 2
     elif h1 > h2:
@@ -90,26 +90,26 @@ while run:
     if keys[pygame.K_a] and player1X >= 20:
         player1X -= vel
 
-    if keys[pygame.K_d] and player1X <= 1250:
+    if keys[pygame.K_d] and player1X <= size_x - 40:
         player1X += vel
 
     if keys[pygame.K_w] and player1Y >= 20:
         player1Y -= vel
 
-    if keys[pygame.K_s] and player1Y <= 680:
+    if keys[pygame.K_s] and player1Y <= size_y - 40:
         player1Y += vel
 
     # player 2 position
     if keys[pygame.K_LEFT] and player2X >= 20:
         player2X -= vel
 
-    if keys[pygame.K_RIGHT] and player2X <= 1250:
+    if keys[pygame.K_RIGHT] and player2X <= size_x - 40:
         player2X += vel
 
     if keys[pygame.K_UP] and player2Y >= 20:
         player2Y -= vel
 
-    if keys[pygame.K_DOWN] and player2Y <= 680:
+    if keys[pygame.K_DOWN] and player2Y <= size_y - 40:
         player2Y += vel
     draw_game()
 
@@ -142,4 +142,3 @@ while run:
 print("p1_score: ", p1_score)
 print("p2_score: ", p2_score)
 pygame.quit()
-
