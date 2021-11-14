@@ -1,8 +1,19 @@
+# A game with pygame
+
 import pygame
 import math
 import random
 
 pygame.init()
+
+# Define colours for the game
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+PINK = (226, 31, 255)
+LIGHT_BLUE = (31, 226, 255)
+GREEN = (0, 250, 0)
+RED = (250, 0, 0)
+
 
 # Define screen size and set it up
 SCREEN_WIDTH = 2 * 1280
@@ -36,12 +47,21 @@ running = True
 
 # Definition of functions for the game
 def draw_game():
-    screen.fill((0, 0, 0))
-    pygame.draw.rect(screen, (226, 31, 255), (player1X, player1Y, 20, 20))
-    pygame.draw.rect(screen, (31, 226, 255), (player2X, player2Y, 20, 20))
-    pygame.draw.rect(screen, (0, 250, 0), (baddyX, baddyY, 40, 40))
-    pygame.draw.circle(screen, (250, 0, 0), extra_centre, extra_radius)
-    pygame.draw.circle(screen, (255, 255, 255), win_circle, 30, 30)
+    # Draw a black background
+    screen.fill(BLACK)
+    # Draw a surface
+    surf = pygame.Surface((150, 150))
+    surf.fill(WHITE)
+    # rect = surf.get_rect()
+    screen.blit(surf, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+    pygame.display.flip()
+
+    # Draws the game players and elements
+    pygame.draw.rect(screen, PINK, (player1X, player1Y, 20, 20))
+    pygame.draw.rect(screen, LIGHT_BLUE, (player2X, player2Y, 20, 20))
+    pygame.draw.rect(screen, GREEN, (baddyX, baddyY, 40, 40))
+    pygame.draw.circle(screen, RED, extra_centre, extra_radius)
+    pygame.draw.circle(screen, WHITE, win_circle, 30, 30)
     pygame.display.update()
 
 
@@ -76,14 +96,14 @@ while running:
     if h1 < h2:
         # chase player1
         baddyX, baddyY = chase(player1X, player1Y, baddyX, baddyY)
-        if running:
-            print("Exit Player 1")
-            p1_score -= 2
+        # if running:
+        #     print("Exit Player 1")
+        #     p1_score -= 2
     elif h1 > h2:
         # chase player2
         baddyX, baddyY = chase(player2X, player2Y, baddyX, baddyY)
-        if not running:
-            p2_score -= 2
+        # if not running:
+        #     p2_score -= 2
 
     # Manage quitting the game
     for event in pygame.event.get():
