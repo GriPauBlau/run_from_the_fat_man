@@ -174,12 +174,14 @@ while running:
 
     if distance(player1X, player1Y, win_circle_x, win_circle_y) < 40 and p1_score >= 5:
         running = False
+
     if distance(player2X, player2Y, win_circle_x, win_circle_y) < 40 and p2_score >= 5:
         running = False
-        if p1_score > p2_score:
-            print("Player 1 wins!")
-        elif p2_score > p1_score:
-            print("Player 2 wins!")
+
+if p1_score > p2_score and (p2_score >= 5 or p1_score >=5):
+    print("Player 1 wins!")
+elif p2_score > p1_score and (p2_score >= 5 or p1_score >=5):
+    print("Player 2 wins!")
 
 print("p1_score: ", p1_score)
 print("p2_score: ", p2_score)
