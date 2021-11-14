@@ -15,33 +15,46 @@ GREEN = (0, 250, 0)
 RED = (250, 0, 0)
 
 
-# Define screen size and set it up
+# Define screen size
 SCREEN_WIDTH = 2 * 1280
 SCREEN_HEIGHT = 2 * 720
 
+# Set up screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+# Add the name of the game on the window top banner
 pygame.display.set_caption("Run from the Fat Man")
 
-
 # Initiate game variables
+# Scores
 p1_score = 0
 p2_score = 0
 
+# Player definitions
+# Player 1
 player1X = 100
 player1Y = 100
-baddyX = 300
-baddyY = 300
+P1Vel = 20
+
+# Player 2
 player2X = 100
 player2Y = 100
+P2Vel = 20
+
+# Baddy
+baddyX = 300
+baddyY = 300
+baddyVel = 10
+
+# Prize
 circle_centre_x = random.random() * SCREEN_WIDTH
 circle_centre_y = random.random() * SCREEN_HEIGHT
 extra_centre = (circle_centre_x, circle_centre_y)
 extra_radius = 10
+
+# Winning circle
 win_circle_x = 1100
 win_circle_y = 100
 win_circle = (win_circle_x, win_circle_y)
-vel = 20
-baddyVel = 10
 
 running = True
 
@@ -117,29 +130,29 @@ while running:
 
     # player position 1
     if keys[pygame.K_a] and player1X >= 20:
-        player1X -= vel
+        player1X -= P1Vel
 
     if keys[pygame.K_d] and player1X <= SCREEN_WIDTH - 40:
-        player1X += vel
+        player1X += P1Vel
 
     if keys[pygame.K_w] and player1Y >= 20:
-        player1Y -= vel
+        player1Y -= P1Vel
 
     if keys[pygame.K_s] and player1Y <= SCREEN_HEIGHT - 40:
-        player1Y += vel
+        player1Y += P1Vel
 
     # player 2 position
     if keys[pygame.K_LEFT] and player2X >= 20:
-        player2X -= vel
+        player2X -= P2Vel
 
     if keys[pygame.K_RIGHT] and player2X <= SCREEN_WIDTH - 40:
-        player2X += vel
+        player2X += P2Vel
 
     if keys[pygame.K_UP] and player2Y >= 20:
-        player2Y -= vel
+        player2Y -= P2Vel
 
     if keys[pygame.K_DOWN] and player2Y <= SCREEN_HEIGHT - 40:
-        player2Y += vel
+        player2Y += P2Vel
     draw_game()
 
     if abs(baddyY - player1Y) < 30 and abs(baddyX - player1X) < 30:
