@@ -39,43 +39,11 @@ SCREEN_HEIGHT = 2 * 720
 
 # Set up screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
 # Add the name of the game on the window top banner
 pygame.display.set_caption("Run from the Fat Man")
 
-# Initiate game variables
-# Scores
-p1_score = 0
-p2_score = 0
-
-# Player definitions
-# Player 1
-player1X = 100
-player1Y = 100
-P1Vel = 20
-
-# Player 2
-player2X = 100
-player2Y = 100
-P2Vel = 20
-
-# Baddy
-baddyX = 300
-baddyY = 300
-baddyVel = 10
-
-# Prize
-circle_centre_x = random.random() * SCREEN_WIDTH
-circle_centre_y = random.random() * SCREEN_HEIGHT
-extra_centre = (circle_centre_x, circle_centre_y)
-extra_radius = 30
-
-# Winning circle
-win_circle_x = 1100
-win_circle_y = 100
-win_circle = (win_circle_x, win_circle_y)
-
 running = True
-
 
 # Definition of functions for the game
 class Player(pygame.sprite.Sprite):
@@ -92,6 +60,7 @@ class Player(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
+        self.score = 0
 
     def update(self, keys):
         if keys[self.movement_keys['up']]:
@@ -114,12 +83,11 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = SCREEN_HEIGHT
 
 
-class Baddy(pygame.sprite.Sprite):
+class FatMan(pygame.sprite.Sprite):
     def __init__(self, colour):
-        super(Baddy, self).__init__()
+        super(FatMan, self).__init__()
         self.colour = colour
-        self.surf = pygame.Surface((40, 40))
-        self.surf.fill(self.colour)
+        self.surf = pygame.image.load("ferpectament_100.png").convert()
         self.rect = self.surf.get_rect(
             # Make the position random
             center=(
@@ -127,15 +95,40 @@ class Baddy(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
+        self.speed = 3
+
+    def update(self, player1, player2):
+        # calculate the distance to each player
+        d1 = distance(player1.rect.centerx,
+                      player1.rect.centery,
+                      self.rect.centerx,
+                      self.rect.centery)
+
+        d2 = distance(player2.rect.centerx,
+                      player2.rect.centery,
+                      self.rect.centerx,
+                      self.rect.centery)
+
+        if d1 < d2:
+            chase(self, player1, self.speed)
+        else:
+            chase(self, player2, self.speed)
+
+        # Keep player on the screen
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > SCREEN_WIDTH:
+            self.rect.right = SCREEN_WIDTH
+        if self.rect.top <= 0:
+            self.rect.top = 0
+        if self.rect.bottom >= SCREEN_HEIGHT:
+            self.rect.bottom = SCREEN_HEIGHT
 
 
 class Prize(pygame.sprite.Sprite):
     def __init__(self, colour):
         super(Prize, self).__init__()
-        # self.colour = colour
-        # self.surf = pygame.Surface((20, 20))
         self.surf = pygame.image.load("red_ball3.png").convert()
-        # self.surf.fill(self.colour)
         self.rect = self.surf.get_rect(
             # Make the position random
             center = (
@@ -148,7 +141,21 @@ class Prize(pygame.sprite.Sprite):
         # self.mask = pygame.mask.from_surface(self.surf)
 
 
-def draw_game(player1, player2, baddy, prize):
+class Exit(pygame.sprite.Sprite):
+    def __init__(self, colour):
+        super(Exit, self).__init__()
+        self.colour = colour
+        self.surf = pygame.Surface((30, 30))
+        self.surf.fill(self.colour)
+        self.rect = self.surf.get_rect(
+            # Make the position random
+            center = (
+                random.randint(0, SCREEN_WIDTH),
+                random.randint(0, SCREEN_HEIGHT),
+            )
+        )
+
+def draw_game(player1, player2, fat_man, prize):
     # Draw a black background
     screen.fill(BLACK)
 
@@ -159,39 +166,39 @@ def draw_game(player1, player2, baddy, prize):
     # Player 2
     screen.blit(player2.surf, player2.rect)
 
-    # Baddy
-    screen.blit(baddy.surf, baddy.rect)
+    # FatMan
+    screen.blit(fat_man.surf, fat_man.rect)
 
     # Prize
     screen.blit(prize.surf, prize.rect)
 
     # Exit
-    # pygame.draw.circle(screen, WHITE, win_circle, 30, 30)
+    screen.blit(exit.surf, exit.rect)
 
     # Update the display
     pygame.display.flip()
 
 
-# def distance(x, y, a, b):
-#     x1 = abs(x - a)
-#     y1 = abs(y - b)
-#     h = math.sqrt(x1 ** 2 + y1 ** 2)
-#     return h
+def distance(x, y, a, b):
+    x1 = abs(x - a)
+    y1 = abs(y - b)
+    h = math.sqrt(x1 ** 2 + y1 ** 2)
+
+    return h
 
 
-# def chase(x, y, chaser_x, chaser_y):
-#     if chaser_x < x - 10:
-#         chaser_x += baddyVel
-#         draw_game()
-#     elif chaser_x > x + 10:
-#         draw_game()
-#         chaser_x -= baddyVel
-#     elif chaser_y < y - 10:
-#         chaser_y += baddyVel
-#     elif chaser_y > y + 10:
-#         chaser_y -= baddyVel
+def chase(chaser, chased, speed):
+    if chaser.rect.centerx > chased.rect.centerx:
+        chaser.rect.move_ip(-speed, 0)
+    if chaser.rect.centerx < chased.rect.centerx:
+        chaser.rect.move_ip(speed, 0)
+    if chaser.rect.centery > chased.rect.centery:
+        chaser.rect.move_ip(0, -speed)
+    if chaser.rect.centery < chased.rect.centery:
+        chaser.rect.move_ip(0, speed)
 
-#     return chaser_x, chaser_y
+    return chaser
+
 
 # Instantiate players
 player1 = Player(PINK,
@@ -206,11 +213,18 @@ player2 = Player(LIGHT_BLUE,
                   'left': K_LEFT,
                   'right': K_RIGHT})
 
+players = pygame.sprite.Group()
+players.add(player1)
+players.add(player2)
+
 # Instantiate foe
-baddy = Baddy(GREEN)
+fat_man = FatMan(GREEN)
 
 # Instantiate a prize
 prize = Prize(RED)
+
+# Instantiate an exit
+exit = Exit(WHITE)
 
 # Main game loop ----
 while running:
@@ -231,59 +245,57 @@ while running:
     # Update the position of the players
     player1.update(keys)
     player2.update(keys)
+    fat_man.update(player1, player2)
 
     # Draw the new frame
-    draw_game(player1, player2, baddy, prize)
+    draw_game(player1, player2, fat_man, prize)
 
-    # Check if any enemies have collided with the player
-    if pygame.sprite.collide_rect(player2, prize):
-        # If so, then remove the player and stop the loop
+    # Check if a player collides with the prize
+    if pygame.sprite.collide_rect(player1, prize):
+        # If so, then remove the prize and create a new one elsewhere
         prize.kill()
         prize = Prize(RED)
         screen.blit(prize.surf, prize.rect)
-        # running = False
+        player1.score += 1
+
+    if pygame.sprite.collide_rect(player2, prize):
+        # If so, then remove the prize and create a new one elsewhere
+        prize.kill()
+        prize = Prize(RED)
+        screen.blit(prize.surf, prize.rect)
+        player2.score += 1
+
 
     screen.fill(BLACK)
 
-    # h1 = distance(player1X, player1Y, baddyX, baddyY)
-    # h2 = distance(player2X, player2Y, baddyX, baddyY)
+    if (pygame.sprite.collide_rect(player1, exit) or\
+       pygame.sprite.collide_rect(player2, exit)) and\
+       (player1.score >= 5 or player2.score >= 5):
+        running = False
 
-    # # Baddy position
-    # if h1 < h2:
-    #     # chase player1
-    #     baddyX, baddyY = chase(player1X, player1Y, baddyX, baddyY)
-    # elif h1 > h2:
-    #     # chase player2
-    #     baddyX, baddyY = chase(player2X, player2Y, baddyX, baddyY)
-    # if abs(baddyY - player1Y) < 30 and abs(baddyX - player1X) < 30:
-    #     running = False
-    # if abs(baddyY - player2Y) < 30 and abs(baddyX - player2X) < 30:
-    #     running = False
+    if pygame.sprite.collide_rect(player1, fat_man):
+        # If so, then remove the prize and create a new one elsewhere
+        player1.score -= 2
+        player1.kill()
+        running = False
+        # print("players.alive? ", player2.alive())
+        # if not player2.alive():
+        #     running = False
 
-    # if distance(player1X, player1Y, circle_centre_x, circle_centre_y) < 30:
-    #     circle_centre_x = random.random() * SCREEN_WIDTH
-    #     circle_centre_y = random.random() * SCREEN_HEIGHT
-    #     extra_centre = (circle_centre_x, circle_centre_y)
-    #     p1_score += 1
-
-    # if distance(player2X, player2Y, circle_centre_x, circle_centre_y) < 30:
-    #     circle_centre_x = random.random() * SCREEN_WIDTH
-    #     circle_centre_y = random.random() * SCREEN_HEIGHT
-    #     extra_centre = (circle_centre_x, circle_centre_y)
-    #     p2_score += 1
-
-    # if distance(player1X, player1Y, win_circle_x, win_circle_y) < 40 and p1_score >= 5:
-    #     running = False
-
-    # if distance(player2X, player2Y, win_circle_x, win_circle_y) < 40 and p2_score >= 5:
-    #     running = False
+    if pygame.sprite.collide_rect(player2, fat_man):
+        # If so, then remove the prize and create a new one elsewhere
+        player2.score -= 2
+        player2.kill()
+        running = False
+        # if not player1.alive():
+        #     running = False
 
 
-if p1_score > p2_score and (p2_score >= 5 or p1_score >=5):
+if player1.score >= 5:
     print("Player 1 wins!")
-elif p2_score > p1_score and (p2_score >= 5 or p1_score >=5):
+elif player2.score >= 5:
     print("Player 2 wins!")
 
-print("p1_score: ", p1_score)
-print("p2_score: ", p2_score)
+print("p1_score: ", player1.score)
+print("p2_score: ", player2.score)
 pygame.quit()
