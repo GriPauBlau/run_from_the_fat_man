@@ -128,7 +128,7 @@ class FatMan(pygame.sprite.Sprite):
 class Prize(pygame.sprite.Sprite):
     def __init__(self, colour):
         super(Prize, self).__init__()
-        self.surf = pygame.image.load("red_ball3.png").convert()
+        self.surf = pygame.image.load("red_ball_p_1.png").convert_alpha()
         self.rect = self.surf.get_rect(
             # Make the position random
             center = (
